@@ -220,5 +220,3 @@ Dúvidas ou sugestões? Abra uma [issue](https://github.com/ypmoraes/FIAP_CICD_P
 ---
 
 ⭐ Se este projeto foi útil, deixe uma estrela!
-
-**Desenvolvido com ❤️ pela equipe FIAP**
