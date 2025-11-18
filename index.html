@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Aplicação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .contador {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .numero {
+            font-size: 48px;
+            color: #4CAF50;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .info {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Minha Aplicação</h1>
+        
+        <div class="contador">
+            <p>Contador:</p>
+            <div class="numero" id="contador">0</div>
+            
+            <button onclick="adicionar()">+ Adicionar</button>
+            <button onclick="remover()">- Remover</button>
+            <button onclick="zerar()">Zerar</button>
+        </div>
+
+        <div class="info">
+            <p><strong>Status:</strong> Funcionando ✅</p>
+            <p><strong>Versão:</strong> 1.0</p>
+            <p><strong>Deploy:</strong> <span id="data"></span></p>
+        </div>
+    </div>
+
+    <script>
+        let numero = 0;
+
+        function adicionar() {
+            numero++;
+            document.getElementById('contador').textContent = numero;
+        }
+
+        function remover() {
+            numero--;
+            document.getElementById('contador').textContent = numero;
+        }
+
+        function zerar() {
+            numero = 0;
+            document.getElementById('contador').textContent = numero;
+        }
+
+        // Mostra a data atual
+        document.getElementById('data').textContent = new Date().toLocaleDateString('pt-BR');
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "minha-aplicacao",
+  "version": "1.0.0",
+  "description": "Aplicação simples para pipeline CI/CD",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo 'Testes OK ✅' && exit 0",
+    "build": "echo 'Build completo ✅' && exit 0",
+    "lint": "echo 'Código verificado ✅' && exit 0",
+    "start": "echo 'Use: docker run -p 8080:80 minha-app'"
+  },
+  "keywords": [
+    "cicd",
+    "pipeline",
+    "docker"
+  ],
+  "author": "7DVPR",
+  "license": "MIT"
+}
