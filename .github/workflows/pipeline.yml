@@ -103,7 +103,7 @@ jobs:
       - name: Enviar notificação de sucesso
         if: success()
         run: |
-          echo "✅ PIPELINE CONCLUÍDO COM SUCESSO!"
+          echo "✅ PIPELINE CONCLUÍDO COM SUCESSO!!"
           echo "Branch: ${{ github.ref_name }}"
           echo "Commit: ${{ github.sha }}"
           echo "Autor: ${{ github.actor }}"
