@@ -11,9 +11,9 @@ on:
 
 jobs:
   # ========================================
-  # STEP 1: BUILD E TESTES
+  # STEP 1: TESTES
   # ========================================
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
     
     steps:
@@ -25,11 +25,35 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Executar testes
+      - name: Executar testes unitários
         run: npm test
       
-      - name: Verificar código
+      - name: Verificar qualidade do código
         run: npm run lint
+      
+      - name: Gerar relatório de testes
+        run: |
+          echo "📊 Relatório de Testes"
+          echo "======================"
+          echo "✅ Testes unitários: PASSOU"
+          echo "✅ Verificação de código: PASSOU"
+          echo "======================"
+
+  # ========================================
+  # STEP 2: BUILD
+  # ========================================
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v3
+      
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
       
       - name: Fazer build
         run: npm run build
@@ -41,10 +65,10 @@ jobs:
           path: .
 
   # ========================================
-  # STEP 2: CRIAR IMAGEM DOCKER
+  # STEP 3: CRIAR IMAGEM DOCKER
   # ========================================
   docker-build:
-    needs: build-and-test
+    needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     
@@ -65,7 +89,7 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/minha-app:latest
 
   # ========================================
-  # STEP 3: DEPLOY
+  # STEP 4: DEPLOY
   # ========================================
   deploy:
     needs: docker-build
@@ -87,7 +111,7 @@ jobs:
           echo "✅ Deploy concluído!"
 
   # ========================================
-  # STEP 4: NOTIFICAÇÃO E MONITORAMENTO
+  # STEP 5: NOTIFICAÇÃO E MONITORAMENTO
   # ========================================
   notify:
     needs: deploy
@@ -103,7 +127,7 @@ jobs:
       - name: Enviar notificação de sucesso
         if: success()
         run: |
-          echo "✅ PIPELINE CONCLUÍDO COM SUCESSO!!"
+          echo "✅ PIPELINE CONCLUÍDO COM SUCESSO!"
           echo "Branch: ${{ github.ref_name }}"
           echo "Commit: ${{ github.sha }}"
           echo "Autor: ${{ github.actor }}"
