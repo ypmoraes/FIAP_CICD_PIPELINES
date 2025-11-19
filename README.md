@@ -8,10 +8,10 @@ Este repositório demonstra a implementação de um pipeline completo de CI/CD (
 
 ## 👥 Equipe
 
-- **Integrante 1:** Bruno Felipe
-- **Integrante 2:** Gustavo Miranda
-- **Integrante 3:** Vitor Viera
-- **Integrante 4:** Yuri Moraes
+- **Integrante 1:** Bruno Felipe    - 360750
+- **Integrante 2:** Gustavo Miranda - 361176
+- **Integrante 3:** Vitor Viera     - 364220
+- **Integrante 4:** Yuri Moraes     - 365060
 
 
 ## 🎯 Funcionalidades
