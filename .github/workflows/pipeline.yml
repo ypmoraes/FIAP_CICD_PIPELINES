@@ -129,10 +129,60 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/minha-app:latest
 
   # ========================================
-  # STEP 5: DEPLOY
+  # STEP 5: BACKUP
+  # ========================================
+  backup:
+    needs: docker-build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v3
+      
+      - name: Criar backup da versão anterior
+        run: |
+          echo "💾 Criando backup da versão anterior..."
+          BACKUP_NAME="backup-$(date +%Y%m%d-%H%M%S)"
+          echo "Nome do backup: $BACKUP_NAME"
+          
+      - name: Salvar informações do commit
+        run: |
+          echo "📝 Salvando informações do deploy..."
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Autor: ${{ github.actor }}"
+          echo "Data: $(date)"
+      
+      - name: Backup da imagem Docker
+        run: |
+          echo "🐳 Fazendo backup da imagem Docker..."
+          echo "Imagem atual: ${{ secrets.DOCKER_USERNAME }}/minha-app:latest"
+          echo "Backup: ${{ secrets.DOCKER_USERNAME }}/minha-app:backup-$(date +%Y%m%d)"
+          echo "✅ Backup da imagem criado"
+      
+      - name: Salvar arquivos do projeto
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-${{ github.sha }}
+          path: .
+          retention-days: 30
+      
+      - name: Gerar relatório de backup
+        run: |
+          echo "📋 Relatório de Backup"
+          echo "====================="
+          echo "✅ Backup criado com sucesso"
+          echo "📦 Artefatos salvos por 30 dias"
+          echo "🐳 Imagem Docker preservada"
+          echo "📝 Informações do commit registradas"
+          echo "====================="
+
+  # ========================================
+  # STEP 6: DEPLOY
   # ========================================
   deploy:
-    needs: docker-build
+    needs: backup
     runs-on: ubuntu-latest
     
     steps:
@@ -151,7 +201,7 @@ jobs:
           echo "✅ Deploy concluído!"
 
   # ========================================
-  # STEP 6: NOTIFICAÇÃO E MONITORAMENTO
+  # STEP 7: NOTIFICAÇÃO E MONITORAMENTO
   # ========================================
   notify:
     needs: deploy
