@@ -242,3 +242,101 @@ jobs:
           echo "Repositório: ${{ github.repository }}"
           echo "Workflow: ${{ github.workflow }}"
           echo "================================"
+
+  # ========================================
+  # STEP 8: DOCUMENTATION
+  # ========================================
+  documentation:
+    needs: notify
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v3
+      
+      - name: Gerar documentação automática
+        run: |
+          echo "📚 Gerando documentação..."
+          echo "# Documentação da Aplicação" > DOCS.md
+          echo "" >> DOCS.md
+          echo "Gerado automaticamente em: $(date)" >> DOCS.md
+          echo "" >> DOCS.md
+          echo "## Versão: ${{ github.sha }}" >> DOCS.md
+          echo "" >> DOCS.md
+          echo "## Arquivos do Projeto" >> DOCS.md
+          ls -la >> DOCS.md
+      
+      - name: Criar changelog
+        run: |
+          echo "📝 Criando changelog..."
+          echo "# Changelog" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "## Versão $(date +%Y.%m.%d)" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### Deploy" >> CHANGELOG.md
+          echo "- Commit: ${{ github.sha }}" >> CHANGELOG.md
+          echo "- Autor: ${{ github.actor }}" >> CHANGELOG.md
+          echo "- Data: $(date)" >> CHANGELOG.md
+          echo "- Branch: ${{ github.ref_name }}" >> CHANGELOG.md
+      
+      - name: Documentar APIs e endpoints
+        run: |
+          echo "🔗 Documentando endpoints..."
+          echo "# API Documentation" > API.md
+          echo "" >> API.md
+          echo "## Endpoints Disponíveis" >> API.md
+          echo "" >> API.md
+          echo "### GET /" >> API.md
+          echo "- Descrição: Página principal" >> API.md
+          echo "- Retorno: HTML" >> API.md
+          echo "" >> API.md
+          echo "### GET /health" >> API.md
+          echo "- Descrição: Health check" >> API.md
+          echo "- Retorno: Status 200 OK" >> API.md
+      
+      - name: Gerar relatório de deploy
+        run: |
+          echo "📊 Gerando relatório de deploy..."
+          echo "# Relatório de Deploy" > DEPLOY_REPORT.md
+          echo "" >> DEPLOY_REPORT.md
+          echo "## Informações do Deploy" >> DEPLOY_REPORT.md
+          echo "- **Pipeline:** ${{ github.workflow }}" >> DEPLOY_REPORT.md
+          echo "- **Status:** Sucesso ✅" >> DEPLOY_REPORT.md
+          echo "- **Commit:** ${{ github.sha }}" >> DEPLOY_REPORT.md
+          echo "- **Branch:** ${{ github.ref_name }}" >> DEPLOY_REPORT.md
+          echo "- **Autor:** ${{ github.actor }}" >> DEPLOY_REPORT.md
+          echo "- **Data:** $(date)" >> DEPLOY_REPORT.md
+          echo "" >> DEPLOY_REPORT.md
+          echo "## Steps Executados" >> DEPLOY_REPORT.md
+          echo "1. ✅ Testes" >> DEPLOY_REPORT.md
+          echo "2. ✅ Build" >> DEPLOY_REPORT.md
+          echo "3. ✅ Security Scan" >> DEPLOY_REPORT.md
+          echo "4. ✅ Docker Build" >> DEPLOY_REPORT.md
+          echo "5. ✅ Backup" >> DEPLOY_REPORT.md
+          echo "6. ✅ Deploy" >> DEPLOY_REPORT.md
+          echo "7. ✅ Notificação" >> DEPLOY_REPORT.md
+          echo "8. ✅ Documentação" >> DEPLOY_REPORT.md
+      
+      - name: Salvar documentação
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-${{ github.sha }}
+          path: |
+            DOCS.md
+            CHANGELOG.md
+            API.md
+            DEPLOY_REPORT.md
+          retention-days: 90
+      
+      - name: Resumo da documentação
+        run: |
+          echo "📋 Resumo da Documentação Gerada"
+          echo "================================="
+          echo "✅ DOCS.md - Documentação geral"
+          echo "✅ CHANGELOG.md - Histórico de mudanças"
+          echo "✅ API.md - Documentação de endpoints"
+          echo "✅ DEPLOY_REPORT.md - Relatório de deploy"
+          echo ""
+          echo "📦 Documentação salva por 90 dias"
+          echo "================================="
